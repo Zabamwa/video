@@ -52,7 +52,7 @@ addTimeLine = (inputValue) => {
 createElement = () => {
     let div = document.createElement("div");
     let textarea = document.createElement('textarea');
-    setAttributes(div, { draggable: 'true', class: 'drag-element',id: `el-${element}`, ondragstart: 'drag(event)'});
+    setAttributes(div, { draggable: 'true', class: 'drag-element',id: `moment-${element}`, ondragstart: 'drag(event)'});
     setAttributes(textarea, { class: 'info', placeholder: 'Text...', id: `textarea-${element}`, onchange: 'changeValue(event)'});
 
     div.appendChild(textarea);
@@ -84,6 +84,8 @@ endDrop = (ev, data) => {
     const left = ev.layerX - parseInt(data[1]) > 0;
     const bottom = ev.layerY - parseInt(data[3])<=video.offsetHeight - dragElement.offsetHeight;
     const top = ev.layerY - parseInt(data[3]) >= 0 ;
+    console.log(ev.layerY)
+    console.log(bottom)
     if(rightSide && left && bottom && top){
         ev.target.parentNode.appendChild(dragElement);
         dragElement.style.left = parseInt(data[1]) < ev.layerX && ((ev.layerX - parseInt(data[1]))/video.offsetWidth) * 100 + '%';
@@ -115,7 +117,9 @@ dropTimeline = ev => {
     let data = ev.dataTransfer.getData("text").split(',');
     const left =  ev.layerX - parseInt(data[1]) >0;
     const right = ev.layerX - parseInt(data[1]) <= timeline.offsetWidth - document.getElementById(data[0]).offsetWidth;
-    if(ev.target.id.includes(data[0].split('-')[1]) && left && right){
+    console.log(!ev.target.id.includes(data[0].split('-')[0]))
+    console.log(data[0])
+    if(ev.target.id.includes(data[0].split('-')[1]) && left && right && !data[0].includes('moment')){
         ev.target.appendChild(document.getElementById(data[0]));
         document.getElementById(data[0]).style.left = (ev.offsetX - parseInt(data[1]))/timeline.offsetWidth*100+'%';
         document.getElementById(data[0]).style.top = ev.offsetY + parseInt(data[2],10)+ 'px';
@@ -160,7 +164,7 @@ deleteElement = ev => {
     const delBar = useBar.find(el=>el.timelineId.includes(ev.target.id.split('-')[1]));
     document.getElementById(delEl.id).remove();
     document.getElementById(delBar.timelineId).remove();
-    useEl.find((el,index)=>{
+    useEl.forEach((el,index)=>{
         if(el.id===delEl.id){
             useEl.splice(index,1)
         }
@@ -172,9 +176,9 @@ momentShow = () => {
     const barPossition = video.currentTime / video.duration;
     timelineBar.forEach((item,index) => {
         timelineBar[index].style.width = barPossition * 100 + '%';
-        const elLeft = document.getElementById(useBar[index].momentId).offsetLeft;
-        const elWidth = document.getElementById(useBar[index].momentId).offsetWidth;
-        const barWidth = document.getElementById(useBar[index].barId).offsetWidth;
+        const elLeft = document.getElementById(useBar[index].momentId) && document.getElementById(useBar[index].momentId).offsetLeft;
+        const elWidth = document.getElementById(useBar[index].momentId) && document.getElementById(useBar[index].momentId).offsetWidth;
+        const barWidth = document.getElementById(useBar[index].barId) && document.getElementById(useBar[index].barId).offsetWidth;
         const divide= (elLeft+elWidth)/barWidth;
         if(elLeft/barWidth < barPossition && barPossition < divide){
             document.getElementById(useEl[index].id).style.display='flex'
