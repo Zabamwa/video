@@ -103,12 +103,11 @@ afterDrop = (data) => {
 
 allowDropTimeline = ev => {
     ev.preventDefault();
-    video.pause();
-    video.currentTime = 0;
 };
 
 dragTimeline = ev => {
     ev.dataTransfer.setData("text", [ev.target.id, ev.layerX]);
+    video.pause();
 };
 
 dropTimeline = ev => {
