@@ -41,7 +41,13 @@ addTimeLine = (inputValue) => {
                 break;
         }
     });
-
+    selectMoment.addEventListener('mouseout',(event)=>{
+        const el = document.getElementById(selectMoment.id);
+        const style = window.getComputedStyle(event.target, null);
+        if(parseInt(style.left) + parseInt(style.width) > timeline.offsetWidth) {
+            el.style.width = '10%';
+        }
+    });
     barContainer.appendChild(bar);
     barContainer.appendChild(selectMoment);
     timeline.appendChild(container);
@@ -84,8 +90,6 @@ endDrop = (ev, data) => {
     const left = ev.layerX - parseInt(data[1]) > 0;
     const bottom = ev.layerY - parseInt(data[3])<=video.offsetHeight - dragElement.offsetHeight;
     const top = ev.layerY - parseInt(data[3]) >= 0 ;
-    console.log(ev.layerY)
-    console.log(bottom)
     if(rightSide && left && bottom && top){
         ev.target.parentNode.appendChild(dragElement);
         dragElement.style.left = parseInt(data[1]) < ev.layerX && ((ev.layerX - parseInt(data[1]))/video.offsetWidth) * 100 + '%';
@@ -117,8 +121,6 @@ dropTimeline = ev => {
     let data = ev.dataTransfer.getData("text").split(',');
     const left =  ev.layerX - parseInt(data[1]) >0;
     const right = ev.layerX - parseInt(data[1]) <= timeline.offsetWidth - document.getElementById(data[0]).offsetWidth;
-    console.log(!ev.target.id.includes(data[0].split('-')[0]))
-    console.log(data[0])
     if(ev.target.id.includes(data[0].split('-')[1]) && left && right && !data[0].includes('moment')){
         ev.target.appendChild(document.getElementById(data[0]));
         document.getElementById(data[0]).style.left = (ev.offsetX - parseInt(data[1]))/timeline.offsetWidth*100+'%';
@@ -203,4 +205,3 @@ video.addEventListener("timeupdate", () => {
         momentShow();
     }
 });
-
