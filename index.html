@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Videomill player</title>
+</head>
+<body>
+<div class="container">
+    <div class="wrapper">
+        <div class="video-container" draggable="true" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div id="video">
+                <video class="video" src="http://clips.vorwaerts-gmbh.de/VfE_html5.mp4"
+                       controls></video>
+            </div>
+        </div>
+        <div class="timeline">
+
+        </div>
+    </div>
+    <div class="element-container">
+
+    </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
