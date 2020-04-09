@@ -16,9 +16,9 @@ addTimeLine = (inputValue) => {
     const bar = document.createElement('div');
     const selectMoment = document.createElement('div');
 
-    setAttributes(barContainer, { class: 'timeline-element', id: `timeline-element-${element}`, ondrop:"dropTimeline(event)", ondragover:"allowDropTimeline(event)",draggable: 'true'});
+    setAttributes(barContainer, { class: 'timeline-element', id: `timeline-element-${element}`, ondrop:"dropTimeline(event)", ondragover:"allowDropTimeline(event)"});
     setAttributes(selectMoment, { class: 'select-moment','data-toggle':'tooltip',title: `${inputValue}`, id: `timeline-${element}`, ondragstart: 'dragTimeline(event)', draggable: true});
-    setAttributes(bar, { class: 'timeline-bar'});
+    setAttributes(bar, { class: 'timeline-bar', draggable: false});
     setAttributes(container, { id: `timelineContainer-${element}`});
 
     selectMoment.innerHTML = inputValue;
