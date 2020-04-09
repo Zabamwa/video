@@ -115,7 +115,7 @@ dropTimeline = ev => {
     let data = ev.dataTransfer.getData("text").split(',');
     const left =  ev.layerX - parseInt(data[1]) >0;
     const right = ev.layerX - parseInt(data[1]) <= timeline.offsetWidth - document.getElementById(data[0]).offsetWidth;
-    if(left && right){
+    if(ev.target.id.includes(data[0].split('-')[1]) && left && right){
         ev.target.appendChild(document.getElementById(data[0]));
         document.getElementById(data[0]).style.left = (ev.offsetX - parseInt(data[1]))/timeline.offsetWidth*100+'%';
         document.getElementById(data[0]).style.top = ev.offsetY + parseInt(data[2],10)+ 'px';
