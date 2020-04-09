@@ -73,6 +73,7 @@ body {
     top: 60px;
     left: 10px;
     resize: both;
+    z-index: 5;
     overflow: hidden;
 }
 
@@ -99,6 +100,7 @@ body {
     color: white;
     font-size: 16px;
     padding: 10px;
+    z-index: 10;
 }
 
 .select-moment {

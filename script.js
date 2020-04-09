@@ -64,6 +64,22 @@ createElement = () => {
     div.appendChild(textarea);
     elementContainer.appendChild(div);
 
+    document.querySelector('.container').addEventListener('mousemove',(event)=>{
+        const el = document.getElementById(div.id);
+        const left = parseInt(el.style.left)
+        const top = parseInt(el.style.top)
+        const elWidth = el.getBoundingClientRect().width;
+        const elHeight = el.getBoundingClientRect().height;
+
+        if(video.offsetWidth*left/100 + elWidth > video.offsetWidth) {
+            el.style.width = '10vw';
+        }
+
+        if(video.offsetHeight*top/100 + elHeight > video.offsetHeight) {
+            el.style.height = '10vh'
+        }
+    });
+
 };
 
 createElement();
