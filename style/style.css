@@ -73,6 +73,7 @@ body {
     top: 60px;
     left: 10px;
     z-index: 5;
+    user-select: none;
     overflow: hidden;
 }
 

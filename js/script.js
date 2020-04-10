@@ -25,7 +25,7 @@ addTimeLine = (inputValue) => {
 
     setAttributes(barContainer, {
         class: 'timeline-element',
-        id: `timeline-element-${element}`,
+        id: `timelineElement-${element}`,
         ondrop: "dropTimeline(event)",
         ondragover: "allowDropTimeline(event)"
     });
@@ -159,12 +159,12 @@ dropTimeline = ev => {
         document.getElementById(data[0]).style.left = (ev.offsetX - parseInt(data[1])) / timeline.offsetWidth * 100 + '%';
         document.getElementById(data[0]).style.top = ev.offsetY + parseInt(data[2], 10) + 'px';
     }
-    video.play();
+
 };
 
 changeValue = ev => {
     const el = document.getElementById(ev.target.id);
-    el.innerHTML = el.value;
+    el.value = el.value;
 
     if (!ev.target.id.includes('textareaBar')) {
         useBar.forEach(bar => {
@@ -207,6 +207,7 @@ rotateElement = ev => {
 deleteElement = ev => {
     const delEl = useEl.find(el => el.id.includes(ev.target.id.split('-')[1]));
     const delBar = useBar.find(el => el.timelineId.includes(ev.target.id.split('-')[1]));
+
     document.getElementById(delEl.id).remove();
     document.getElementById(delBar.timelineId).remove();
     useEl.forEach((el, index) => {
@@ -215,7 +216,7 @@ deleteElement = ev => {
         }
     });
     useBar.forEach((el, index) => {
-        if (el.id === delBar.id) {
+        if (el.barId === delBar.barId) {
             useBar.splice(index, 1)
         }
     });
