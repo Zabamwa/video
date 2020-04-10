@@ -55,13 +55,6 @@ addTimeLine = (inputValue) => {
                 break;
         }
     });
-    selectMoment.addEventListener('mouseout', (event) => {
-        const el = document.getElementById(selectMoment.id);
-        const style = window.getComputedStyle(event.target, null);
-        if (parseInt(style.left) + parseInt(style.width) > timeline.offsetWidth) {
-            el.style.width = '10%';
-        }
-    });
 
     $(function () {
         $(`#${selectMoment.id}`).resizable({
