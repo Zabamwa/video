@@ -164,7 +164,6 @@ dropTimeline = ev => {
 
 changeValue = ev => {
     const el = document.getElementById(ev.target.id);
-    el.value = el.value;
 
     if (!ev.target.id.includes('textareaBar')) {
         useBar.forEach(bar => {
