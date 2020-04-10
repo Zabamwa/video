@@ -16,7 +16,12 @@ addTimeLine = (inputValue) => {
     const bar = document.createElement('div');
     const selectMoment = document.createElement('div');
     const textarea = document.createElement('textarea');
-    setAttributes(textarea, {class: 'infoBar', id: `textareaBar-${element}`, onchange: 'changeValue(event)', draggable: false});
+    setAttributes(textarea, {
+        class: 'infoBar',
+        id: `textareaBar-${element}`,
+        onchange: 'changeValue(event)',
+        draggable: false
+    });
 
     setAttributes(barContainer, {
         class: 'timeline-element',
@@ -55,10 +60,10 @@ addTimeLine = (inputValue) => {
                 break;
         }
     });
-    selectMoment.addEventListener('mouseout',(event)=>{
+    selectMoment.addEventListener('mouseout', (event) => {
         const el = document.getElementById(selectMoment.id);
         const style = window.getComputedStyle(event.target, null);
-        if(parseInt(style.left) + parseInt(style.width) > timeline.offsetWidth) {
+        if (parseInt(style.left) + parseInt(style.width) > timeline.offsetWidth) {
             el.style.width = '10%';
         }
     });
@@ -72,15 +77,15 @@ addTimeLine = (inputValue) => {
 };
 
 createElement = () => {
-    let div = document.createElement("div");
-    let textarea = document.createElement('textarea');
+    const div = document.createElement("div");
+    const textarea = document.createElement('textarea');
     setAttributes(div, {draggable: 'true', class: 'drag-element', id: `moment-${element}`, ondragstart: 'drag(event)'});
     setAttributes(textarea, {
         class: 'info',
         placeholder: 'Text...',
         id: `textarea-${element}`,
         onchange: 'changeValue(event)',
-        draggable:false
+        draggable: false
     });
 
     div.appendChild(textarea);
@@ -118,7 +123,7 @@ endDrop = (ev, data) => {
     const left = ev.layerX - parseInt(data[1]) > 0;
     const bottom = dragElement && ev.layerY - parseInt(data[3]) <= video.offsetHeight - dragElement.offsetHeight;
     const top = ev.layerY - parseInt(data[3]) >= 0;
-    if (rightSide && left && bottom && top ) {
+    if (rightSide && left && bottom && top) {
         ev.target.parentNode.appendChild(dragElement);
         dragElement.style.left = parseInt(data[1]) < ev.layerX && ((ev.layerX - parseInt(data[1])) / video.offsetWidth) * 100 + '%';
         dragElement.style.top = (ev.offsetY + parseInt(data[2], 10)) / video.offsetHeight * 100 + '%';
@@ -158,7 +163,7 @@ dropTimeline = ev => {
 };
 
 changeValue = ev => {
-    let el = document.getElementById(ev.target.id);
+    const el = document.getElementById(ev.target.id);
     el.innerHTML = el.value;
 
     if (!ev.target.id.includes('textareaBar')) {
@@ -176,7 +181,7 @@ changeValue = ev => {
             }
         })
     }
-}
+};
 
 rotateElement = ev => {
     if (ev.target.id.includes(controlBtn[0])) {
@@ -202,36 +207,36 @@ rotateElement = ev => {
 deleteElement = ev => {
     const delEl = useEl.find(el => el.id.includes(ev.target.id.split('-')[1]));
     const delBar = useBar.find(el => el.timelineId.includes(ev.target.id.split('-')[1]));
-        document.getElementById(delEl.id).remove();
-        document.getElementById(delBar.timelineId).remove();
-        useEl.forEach((el, index) => {
-            if (el.id === delEl.id) {
-                useEl.splice(index, 1)
-            }
-        });
-        useBar.forEach((el,index) => {
-            if(el.id === delBar.id) {
-                useBar.splice(index,1)
-            }
-        });
+    document.getElementById(delEl.id).remove();
+    document.getElementById(delBar.timelineId).remove();
+    useEl.forEach((el, index) => {
+        if (el.id === delEl.id) {
+            useEl.splice(index, 1)
+        }
+    });
+    useBar.forEach((el, index) => {
+        if (el.id === delBar.id) {
+            useBar.splice(index, 1)
+        }
+    });
 };
 
 momentShow = () => {
     const timelineBar = document.querySelectorAll('.timeline-bar');
     const barPossition = video.currentTime / video.duration;
     timelineBar.forEach((item) => {
-        item.style.width = barPossition * 100 +'%'
+        item.style.width = barPossition * 100 + '%'
     });
     useEl.forEach((item, index) => {
-        if(item) {
+        if (item) {
             const elLeft = document.getElementById(useBar[index].momentId) && document.getElementById(useBar[index].momentId).offsetLeft;
             const elWidth = document.getElementById(useBar[index].momentId) && document.getElementById(useBar[index].momentId).offsetWidth;
             const barWidth = document.getElementById(useBar[index].barId) && document.getElementById(useBar[index].barId).offsetWidth;
             const divide = (elLeft + elWidth) / barWidth;
             if (elLeft / barWidth < barPossition && barPossition < divide) {
-                    document.getElementById(item.id).style.display = 'flex'
+                document.getElementById(item.id).style.display = 'flex'
             } else {
-                    document.getElementById(item.id).style.display = 'none'
+                document.getElementById(item.id).style.display = 'none'
             }
         }
     });
