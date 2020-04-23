@@ -4,7 +4,7 @@ const timeline = document.querySelector('.timeline');
 let useBar = [];
 let useEl = [];
 let element = 0;
-const controlBtn = ['Left', 'Right', 'Delete'];
+const controlBtn = ['Delete'];
 
 setAttributes = (el, attrs) => {
     Object.keys(attrs).forEach(key => el.setAttribute(key, attrs[key]));
@@ -15,71 +15,77 @@ addTimeLine = (inputValue) => {
     const barContainer = document.createElement("div");
     const bar = document.createElement('div');
     const selectMoment = document.createElement('div');
-    const textarea = document.createElement('textarea');
+    const textarea = document.createElement('div');
     setAttributes(textarea, {
         class: 'infoBar',
         id: `textareaBar-${element}`,
-        onchange: 'changeValue(event)',
-        draggable: false
     });
 
     setAttributes(barContainer, {
         class: 'timeline-element',
         id: `timelineElement-${element}`,
-        ondrop: "dropTimeline(event)",
-        ondragover: "allowDropTimeline(event)"
     });
     setAttributes(selectMoment, {
         class: 'select-moment',
         'data-toggle': 'tooltip',
         title: `${inputValue}`,
         id: `timeline-${element}`,
-        ondragstart: 'dragTimeline(event)',
-        draggable: true
     });
     setAttributes(bar, {class: 'timeline-bar', draggable: false});
     setAttributes(container, {id: `timelineContainer-${element}`});
 
-    textarea.value = inputValue;
+    textarea.innerHTML = inputValue;
     useBar.push({timelineId: container.id, barId: barContainer.id, momentId: selectMoment.id, textareaId: textarea.id});
     controlBtn.forEach(el => {
-        switch (el.toLowerCase()) {
-            case 'delete':
                 const deleteBtn = document.createElement('button');
                 deleteBtn.innerHTML = `${el}`;
                 setAttributes(deleteBtn, {id: `btn${el}-${element}`});
                 deleteBtn.addEventListener('click', deleteElement, true);
                 container.appendChild(deleteBtn)
-                break;
-            default:
-                const rotateBtn = document.createElement('button');
-                rotateBtn.innerHTML = `Rotate ${el}`;
-                setAttributes(rotateBtn, {id: `btn${el}-${element}`});
-                rotateBtn.addEventListener('click', rotateElement, true);
-                container.appendChild(rotateBtn);
-                break;
-        }
-    });
-    selectMoment.addEventListener('mouseout', (event) => {
-        const el = document.getElementById(selectMoment.id);
-        const style = window.getComputedStyle(event.target, null);
-        if (parseInt(style.left) + parseInt(style.width) > timeline.offsetWidth) {
-            el.style.width = '10%';
-        }
     });
 
-    selectMoment.appendChild(textarea)
+    $(function () {
+        $(`#${selectMoment.id}`).resizable({
+            containment: '.timeline-element',
+            resize: function () {
+                const el = document.getElementById(selectMoment.id);
+                const wrapper = document.getElementById(barContainer.id);
+
+                el.style.width = el.offsetWidth *100/wrapper.offsetWidth + '%';
+                el.style.height = el.offsetHeight *100/wrapper.offsetHeight + '%';
+            }
+        });
+    });
+
+    $(function() {
+        $( `#${selectMoment.id}` ).draggable({axis:'x', containment: `#${barContainer.id}`, stop: function () {
+                const el = document.getElementById(selectMoment.id);
+                const wrapper = document.getElementById(barContainer.id);
+
+                el.style.left = el.offsetLeft*100/wrapper.offsetWidth + '%';
+            }});
+    } );
+
+    selectMoment.appendChild(textarea);
     barContainer.appendChild(bar);
     barContainer.appendChild(selectMoment);
     timeline.appendChild(container);
     container.appendChild(barContainer);
     element++;
+
+    const el = document.getElementById(selectMoment.id);
+
+    el.addEventListener("mousemove", () => {
+        timeUpdate()
+    });
 };
 
 createElement = () => {
     const div = document.createElement("div");
     const textarea = document.createElement('textarea');
+    const rotateDot = document.createElement('div');
     setAttributes(div, {draggable: 'true', class: 'drag-element', id: `moment-${element}`, ondragstart: 'drag(event)'});
+    setAttributes(rotateDot, {class: 'rotate-dot'});
     setAttributes(textarea, {
         class: 'info',
         placeholder: 'Text...',
@@ -89,13 +95,35 @@ createElement = () => {
     });
 
     div.appendChild(textarea);
+    div.appendChild(rotateDot);
     elementContainer.appendChild(div);
 
-    $(function () {
-        $(`#${div.id}`).resizable({
-            containment: "#video-wrapper",
+        $(`#${div.id}`).draggable({
+            handle: `#${div.id}`,
+            containment: `.video`
         });
-    });
+
+        $(`#${div.id}`).draggable({
+            handle: `.rotate-dot`,
+            opacity: 0.001,
+            helper: 'clone',
+            drag: function (event) {
+                const // get center of div to rotate
+                    pw = document.getElementById(div.id),
+                    pwBox = pw.getBoundingClientRect(),
+                    center_x = (pwBox.left + pwBox.right) / 2,
+                    center_y = (pwBox.top + pwBox.bottom) / 2,
+                    // get mouse position
+                    mouse_x = event.pageX,
+                    mouse_y = event.pageY,
+                    radians = Math.atan2(mouse_x - center_x, mouse_y - center_y),
+                    degree = Math.round((radians * (180 / Math.PI) * -1) + 100);
+                let rotateCSS = 'rotate(' + (degree + 140) + 'deg)';
+
+                document.getElementById(div.id).style.transform = rotateCSS;
+            }
+        });
+
 
 };
 
@@ -108,13 +136,28 @@ allowDrop = ev => {
 drag = ev => {
     ev.stopPropagation();
     const style = window.getComputedStyle(ev.target, null);
-    ev.dataTransfer.setData("text", [ev.target.id, ev.layerX, parseInt(style.getPropertyValue('top')) - ev.y, ev.layerY, ev.target.children[0].id]);
+    ev && ev.dataTransfer && ev.dataTransfer.setData("text", [ev.target.id, ev.layerX, parseInt(style.getPropertyValue('top')) - ev.y, ev.layerY, ev.target.children[0].id]);
 };
 
 drop = ev => {
     ev.preventDefault();
     const data = ev.dataTransfer.getData("text").split(',');
     endDrop(ev, data);
+    timeUpdate();
+    $(function () {
+        $(`#${data[0]}`).resizable({
+            containment: '.video',
+            resize: function () {
+                const el = document.getElementById(data[0]);
+                const wrapper = document.getElementById('video-wrapper');
+                el.style.width = el.offsetWidth * 100 / wrapper.offsetWidth + '%';
+                el.style.height = el.offsetHeight * 100 / wrapper.offsetHeight + '%';
+            }
+        });
+    });
+    if(video.currentTime===0){
+        video.play();
+    }
 };
 
 endDrop = (ev, data) => {
@@ -123,7 +166,7 @@ endDrop = (ev, data) => {
     const left = ev.layerX - parseInt(data[1]) > 0;
     const bottom = dragElement && ev.layerY - parseInt(data[3]) <= video.offsetHeight - dragElement.offsetHeight;
     const top = ev.layerY - parseInt(data[3]) >= 0;
-    if (rightSide && left && bottom && top) {
+    if (rightSide && left && bottom && top && !ev.target.id.includes('textarea')) {
         ev.target.parentNode.appendChild(dragElement);
         dragElement.style.left = parseInt(data[1]) < ev.layerX && ((ev.layerX - parseInt(data[1])) / video.offsetWidth) * 100 + '%';
         dragElement.style.top = (ev.offsetY + parseInt(data[2], 10)) / video.offsetHeight * 100 + '%';
@@ -134,11 +177,12 @@ endDrop = (ev, data) => {
 afterDrop = (data) => {
     const inputValue = document.getElementById(data[0]).children[0];
     if (elementContainer.children.length === 0) {
-        useEl.push({id: data[0], rotate: 0, textareaId: data[4]});
+        useEl.push({id: data[0], textareaId: data[4]});
         addTimeLine(inputValue.value);
         createElement();
     }
 };
+
 
 allowDropTimeline = ev => {
     ev.preventDefault();
@@ -146,7 +190,6 @@ allowDropTimeline = ev => {
 
 dragTimeline = ev => {
     ev.dataTransfer.setData("text", [ev.target.id, ev.layerX]);
-    video.pause();
 };
 
 dropTimeline = ev => {
@@ -164,43 +207,12 @@ dropTimeline = ev => {
 
 changeValue = ev => {
     const el = document.getElementById(ev.target.id);
-
-    if (!ev.target.id.includes('textareaBar')) {
         useBar.forEach(bar => {
             if (bar.textareaId.includes(ev.target.id.split('-')[1])) {
-                document.getElementById(bar.textareaId).value = el.value;
+                document.getElementById(bar.textareaId).innerHTML = el.value;
                 document.getElementById(bar.textareaId).title = el.value
             }
         })
-    } else {
-        useEl.forEach(dragEl => {
-            if (dragEl.textareaId.includes(ev.target.id.split('-')[1])) {
-                document.getElementById(dragEl.textareaId).value = el.value;
-                document.getElementById(dragEl.textareaId).title = el.value
-            }
-        })
-    }
-};
-
-rotateElement = ev => {
-    if (ev.target.id.includes(controlBtn[0])) {
-        useEl.forEach(el => {
-            if (el.id.includes(ev.target.id.split('-')[1])) {
-                el.rotate -= 5;
-                document.getElementById(el.id).style.transform = `rotate(${el.rotate}deg)`;
-            }
-        })
-    } else {
-        useEl.forEach(el => {
-            if (el.id.includes(ev.target.id.split('-')[1])) {
-                el.rotate += 5;
-                if (el.rotate > 360 || el.rotate < -365) {
-                    el.rotate = 0
-                }
-                document.getElementById(el.id).style.transform = `rotate(${el.rotate}deg)`;
-            }
-        })
-    }
 };
 
 deleteElement = ev => {
@@ -245,6 +257,10 @@ momentShow = () => {
 
 
 video.addEventListener("timeupdate", () => {
+    timeUpdate()
+});
+
+timeUpdate = () => {
     const timelineBar = document.querySelectorAll('.timeline-bar');
     useBar.forEach(el => {
         const moment = document.getElementById(el.momentId);
@@ -255,14 +271,4 @@ video.addEventListener("timeupdate", () => {
     if (timelineBar) {
         momentShow();
     }
-});
-
-resizeWindow = () => {
-    useEl.forEach(el => {
-        document.getElementById(el.id).style.width = '10vw';
-        document.getElementById(el.id).style.height = '10vh';
-    });
 };
-
-
-window.addEventListener('resize', resizeWindow);

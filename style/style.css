@@ -60,13 +60,32 @@ body {
     position: relative;
 }
 
-.drag-element {
+#video-wrapper .rotate-dot {
+    width:10px;
+    height: 10px;
+    position: absolute;
+    background: white;
+    cursor: pointer;
+    border-radius: 10px;
+    z-index: 50;
+}
+
+#video-wrapper .drag-element {
+    width: 15%;
+    height: 15%;
+    background: rgba(0, 0, 0, 0.4);
+    position: absolute !important;
+    display: flex;
+    top: 60px;
+    left: 10px;
+    z-index: 5;
+    user-select: none;
+    overflow: hidden;
+}
+
+.element-container .drag-element {
     width: 10vw;
-    max-width: 300px;
-    min-width: 100px;
     height: 10vh;
-    min-height: 100px;
-    max-height: 200px;
     background: rgba(0, 0, 0, 0.4);
     position: absolute !important;
     display: flex;
@@ -115,11 +134,8 @@ body {
     z-index: 20;
     left: 0;
     opacity: 0.6;
-    max-width: 200px;
-    min-width: 50px;
     position: absolute;
     color: white;
-    resize: horizontal;
     overflow: hidden
 }
 
@@ -133,11 +149,6 @@ body {
 
     .wrapper {
         margin: 0;
-    }
-
-    .drag-element {
-        min-width: 75px;
-        min-height: 50px;
     }
 }
 
