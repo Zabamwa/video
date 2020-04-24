@@ -5,6 +5,7 @@ let useBar = [];
 let useEl = [];
 let element = 0;
 const controlBtn = ['Delete'];
+let rotateDot = '';
 
 setAttributes = (el, attrs) => {
     Object.keys(attrs).forEach(key => el.setAttribute(key, attrs[key]));
@@ -46,6 +47,7 @@ addTimeLine = (inputValue) => {
 
     $(function () {
         $(`#${selectMoment.id}`).resizable({
+            handles: 'e, w',
             containment: '.timeline-element',
             resize: function () {
                 const el = document.getElementById(selectMoment.id);
@@ -75,17 +77,56 @@ addTimeLine = (inputValue) => {
 
     const el = document.getElementById(selectMoment.id);
 
-    el.addEventListener("mousemove", () => {
+    el.addEventListener("mousedown", () => {
         timeUpdate()
     });
+};
+
+rotateNWDot = (event,div,type) => {
+    let degreeAdd;
+    switch(type){
+        case 'nw':{
+            degreeAdd=140;
+            break;
+        }
+        case 'ne':
+            degreeAdd=20;
+            break;
+        case 'sw':
+            degreeAdd=200;
+            break;
+        case 'se':
+            degreeAdd=-40;
+            break;
+    }
+    const // get center of div to rotate
+        pw = document.getElementById(div.id),
+        pwBox = pw.getBoundingClientRect(),
+        center_x = (pwBox.left + pwBox.right) / 2,
+        center_y = (pwBox.top + pwBox.bottom) / 2,
+        // get mouse position
+        mouse_x = event.pageX,
+        mouse_y = event.pageY,
+        radians = Math.atan2(mouse_x - center_x, mouse_y - center_y),
+        degree = Math.round((radians * (180 / Math.PI) * -1) + 100);
+
+    let rotateCSS = 'rotate(' + (degree + degreeAdd) + 'deg)';
+
+    document.getElementById(div.id).style.transform = rotateCSS;
 };
 
 createElement = () => {
     const div = document.createElement("div");
     const textarea = document.createElement('textarea');
-    const rotateDot = document.createElement('div');
+    const rotateDotNW = document.createElement('div');
+    const rotateDotSW = document.createElement('div');
+    const rotateDotNE = document.createElement('div');
+    const rotateDotSE = document.createElement('div');
     setAttributes(div, {draggable: 'true', class: 'drag-element', id: `moment-${element}`, ondragstart: 'drag(event)'});
-    setAttributes(rotateDot, {class: 'rotate-dot'});
+    setAttributes(rotateDotNW, {class: 'rotate-dot', id: 'nw', onmousedown:'selectRotateDot(event)'});
+    setAttributes(rotateDotSW, {class: 'rotate-dot', id: 'sw', onmousedown:'selectRotateDot(event)'});
+    setAttributes(rotateDotNE, {class: 'rotate-dot', id: 'ne', onmousedown:'selectRotateDot(event)'});
+    setAttributes(rotateDotSE, {class: 'rotate-dot', id: 'se', onmousedown:'selectRotateDot(event)'});
     setAttributes(textarea, {
         class: 'info',
         placeholder: 'Text...',
@@ -95,7 +136,10 @@ createElement = () => {
     });
 
     div.appendChild(textarea);
-    div.appendChild(rotateDot);
+    div.appendChild(rotateDotNW);
+    div.appendChild(rotateDotSW);
+    div.appendChild(rotateDotNE);
+    div.appendChild(rotateDotSE);
     elementContainer.appendChild(div);
 
         $(`#${div.id}`).draggable({
@@ -108,26 +152,16 @@ createElement = () => {
             opacity: 0.001,
             helper: 'clone',
             drag: function (event) {
-                const // get center of div to rotate
-                    pw = document.getElementById(div.id),
-                    pwBox = pw.getBoundingClientRect(),
-                    center_x = (pwBox.left + pwBox.right) / 2,
-                    center_y = (pwBox.top + pwBox.bottom) / 2,
-                    // get mouse position
-                    mouse_x = event.pageX,
-                    mouse_y = event.pageY,
-                    radians = Math.atan2(mouse_x - center_x, mouse_y - center_y),
-                    degree = Math.round((radians * (180 / Math.PI) * -1) + 100);
-                let rotateCSS = 'rotate(' + (degree + 140) + 'deg)';
-
-                document.getElementById(div.id).style.transform = rotateCSS;
+                rotateNWDot(event,div,rotateDot)
             }
         });
-
-
 };
 
 createElement();
+
+selectRotateDot = (event)=>{
+    rotateDot = event.target.id
+};
 
 allowDrop = ev => {
     ev.preventDefault();
@@ -146,6 +180,7 @@ drop = ev => {
     timeUpdate();
     $(function () {
         $(`#${data[0]}`).resizable({
+            handles:  'nw, ne, sw, se',
             containment: '.video',
             resize: function () {
                 const el = document.getElementById(data[0]);
@@ -155,9 +190,7 @@ drop = ev => {
             }
         });
     });
-    if(video.currentTime===0){
-        video.play();
-    }
+
 };
 
 endDrop = (ev, data) => {

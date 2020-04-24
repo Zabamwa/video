@@ -60,14 +60,51 @@ body {
     position: relative;
 }
 
-#video-wrapper .rotate-dot {
-    width:10px;
-    height: 10px;
+#video-wrapper #nw {
+    width:8px;
+    height: 8px;
+    top: -5px;
+    left: -5px;
     position: absolute;
+    background: red;
+    z-index: 100;
+}
+
+#video-wrapper #ne {
+    width:8px;
+    height: 8px;
+    top: -5px;
+    right: -5px;
+    position: absolute;
+    background: red;
+    z-index: 100;
+}
+
+#video-wrapper #sw {
+    width:8px;
+    height: 8px;
+    bottom: -5px;
+    left: -5px;
+    position: absolute;
+    background: red;
+    z-index: 100;
+}
+
+#video-wrapper #se {
+    width:8px;
+    height: 8px;
+    bottom: -5px;
+    right: -5px;
+    position: absolute;
+    background: red;
+    z-index: 100;
+}
+
+.ui-resizable-nw,.ui-resizable-sw,.ui-resizable-ne,.ui-resizable-se {
+    width: 15px !important;
+    height: 15px !important;
     background: white;
-    cursor: pointer;
     border-radius: 10px;
-    z-index: 50;
 }
 
 #video-wrapper .drag-element {
@@ -78,9 +115,9 @@ body {
     display: flex;
     top: 60px;
     left: 10px;
+    transform: rotate(0deg);
     z-index: 5;
     user-select: none;
-    overflow: hidden;
 }
 
 .element-container .drag-element {
@@ -100,7 +137,6 @@ body {
     width: 100px;
     height: 100px;
     background: red;
-
 }
 
 .info {
@@ -137,6 +173,12 @@ body {
     position: absolute;
     color: white;
     overflow: hidden
+}
+
+.ui-icon {
+    background-image: none !important;
+    bottom: -5px !important;
+    right: -5px !important;
 }
 
 @media only screen and (max-width: 1200px) {
