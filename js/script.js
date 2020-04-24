@@ -38,11 +38,11 @@ addTimeLine = (inputValue) => {
     textarea.innerHTML = inputValue;
     useBar.push({timelineId: container.id, barId: barContainer.id, momentId: selectMoment.id, textareaId: textarea.id});
     controlBtn.forEach(el => {
-                const deleteBtn = document.createElement('button');
-                deleteBtn.innerHTML = `${el}`;
-                setAttributes(deleteBtn, {id: `btn${el}-${element}`});
-                deleteBtn.addEventListener('click', deleteElement, true);
-                container.appendChild(deleteBtn)
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = `${el}`;
+        setAttributes(deleteBtn, {id: `btn${el}-${element}`});
+        deleteBtn.addEventListener('click', deleteElement, true);
+        container.appendChild(deleteBtn)
     });
 
     $(function () {
@@ -53,20 +53,21 @@ addTimeLine = (inputValue) => {
                 const el = document.getElementById(selectMoment.id);
                 const wrapper = document.getElementById(barContainer.id);
 
-                el.style.width = el.offsetWidth *100/wrapper.offsetWidth + '%';
-                el.style.height = el.offsetHeight *100/wrapper.offsetHeight + '%';
+                el.style.width = el.offsetWidth * 100 / wrapper.offsetWidth + '%';
+                el.style.height = el.offsetHeight * 100 / wrapper.offsetHeight + '%';
             }
         });
     });
 
-    $(function() {
-        $( `#${selectMoment.id}` ).draggable({axis:'x', containment: `#${barContainer.id}`, stop: function () {
+    $(function () {
+        $(`#${selectMoment.id}`).draggable({
+            axis: 'x', containment: `#${barContainer.id}`, stop: function () {
                 const el = document.getElementById(selectMoment.id);
                 const wrapper = document.getElementById(barContainer.id);
-
-                el.style.left = el.offsetLeft*100/wrapper.offsetWidth + '%';
-            }});
-    } );
+                el.style.left = el.offsetLeft * 100 / wrapper.offsetWidth + '%';
+            }
+        });
+    });
 
     selectMoment.appendChild(textarea);
     barContainer.appendChild(bar);
@@ -82,21 +83,20 @@ addTimeLine = (inputValue) => {
     });
 };
 
-rotateNWDot = (event,div,type) => {
+rotateNWDot = (event, div, type) => {
     let degreeAdd;
-    switch(type){
-        case 'nw':{
-            degreeAdd=140;
+    switch (type) {
+        case 'nw':
+            degreeAdd = 140;
             break;
-        }
         case 'ne':
-            degreeAdd=20;
+            degreeAdd = 20;
             break;
         case 'sw':
-            degreeAdd=200;
+            degreeAdd = 200;
             break;
         case 'se':
-            degreeAdd=-40;
+            degreeAdd = -40;
             break;
     }
     const // get center of div to rotate
@@ -123,10 +123,10 @@ createElement = () => {
     const rotateDotNE = document.createElement('div');
     const rotateDotSE = document.createElement('div');
     setAttributes(div, {draggable: 'true', class: 'drag-element', id: `moment-${element}`, ondragstart: 'drag(event)'});
-    setAttributes(rotateDotNW, {class: 'rotate-dot', id: 'nw', onmousedown:'selectRotateDot(event)'});
-    setAttributes(rotateDotSW, {class: 'rotate-dot', id: 'sw', onmousedown:'selectRotateDot(event)'});
-    setAttributes(rotateDotNE, {class: 'rotate-dot', id: 'ne', onmousedown:'selectRotateDot(event)'});
-    setAttributes(rotateDotSE, {class: 'rotate-dot', id: 'se', onmousedown:'selectRotateDot(event)'});
+    setAttributes(rotateDotNW, {class: 'rotate-dot', id: 'nw', onmousedown: 'selectRotateDot(event)'});
+    setAttributes(rotateDotSW, {class: 'rotate-dot', id: 'sw', onmousedown: 'selectRotateDot(event)'});
+    setAttributes(rotateDotNE, {class: 'rotate-dot', id: 'ne', onmousedown: 'selectRotateDot(event)'});
+    setAttributes(rotateDotSE, {class: 'rotate-dot', id: 'se', onmousedown: 'selectRotateDot(event)'});
     setAttributes(textarea, {
         class: 'info',
         placeholder: 'Text...',
@@ -142,24 +142,24 @@ createElement = () => {
     div.appendChild(rotateDotSE);
     elementContainer.appendChild(div);
 
-        $(`#${div.id}`).draggable({
-            handle: `#${div.id}`,
-            containment: `.video`
-        });
+    $(`#${div.id}`).draggable({
+        handle: `#${div.id}`,
+        containment: `.video`
+    });
 
-        $(`#${div.id}`).draggable({
-            handle: `.rotate-dot`,
-            opacity: 0.001,
-            helper: 'clone',
-            drag: function (event) {
-                rotateNWDot(event,div,rotateDot)
-            }
-        });
+    $(`#${div.id}`).draggable({
+        handle: `.rotate-dot`,
+        opacity: 0.001,
+        helper: 'clone',
+        drag: function (event) {
+            rotateNWDot(event, div, rotateDot)
+        }
+    });
 };
 
 createElement();
 
-selectRotateDot = (event)=>{
+selectRotateDot = (event) => {
     rotateDot = event.target.id
 };
 
@@ -180,7 +180,7 @@ drop = ev => {
     timeUpdate();
     $(function () {
         $(`#${data[0]}`).resizable({
-            handles:  'nw, ne, sw, se',
+            handles: 'nw, ne, sw, se',
             containment: '.video',
             resize: function () {
                 const el = document.getElementById(data[0]);
@@ -240,12 +240,12 @@ dropTimeline = ev => {
 
 changeValue = ev => {
     const el = document.getElementById(ev.target.id);
-        useBar.forEach(bar => {
-            if (bar.textareaId.includes(ev.target.id.split('-')[1])) {
-                document.getElementById(bar.textareaId).innerHTML = el.value;
-                document.getElementById(bar.textareaId).title = el.value
-            }
-        })
+    useBar.forEach(bar => {
+        if (bar.textareaId.includes(ev.target.id.split('-')[1])) {
+            document.getElementById(bar.textareaId).innerHTML = el.value;
+            document.getElementById(bar.textareaId).title = el.value
+        }
+    })
 };
 
 deleteElement = ev => {
