@@ -65,8 +65,8 @@ body {
 }
 
 #video-wrapper #nw {
-    width:10px;
-    height: 10px;
+    width:8px;
+    height: 8px;
     font-size: 8px;
     top: -4px;
     left: 1px;
@@ -75,31 +75,31 @@ body {
 }
 
 #video-wrapper #ne {
-    width:10px;
-    height: 10px;
+    width:8px;
+    height: 8px;
     font-size: 8px;
     top: -4px;
-    right: -5px;
+    right: -4px;
     position: absolute;
     z-index: 100;
 }
 
 #video-wrapper #sw {
-    width:10px;
-    height: 10px;
+    width:8px;
+    height: 8px;
     font-size: 8px;
-    bottom: -1px;
+    bottom: 0px;
     left: 1px;
     position: absolute;
     z-index: 100;
 }
 
 #video-wrapper #se {
-    width:10px;
-    height: 10px;
+    width:8px;
+    height: 8px;
     font-size: 8px;
-    bottom: -1px;
-    right: -5px;
+    bottom: 0px;
+    right: -4px;
     position: absolute;
     z-index: 100;
 }
