@@ -51,6 +51,10 @@ body {
     display: flex;
 }
 
+.element-container .fas {
+    display: none;
+}
+
 .video {
     width: 100%;
 }
@@ -61,42 +65,42 @@ body {
 }
 
 #video-wrapper #nw {
-    width:8px;
-    height: 8px;
-    top: -5px;
-    left: -5px;
+    width:10px;
+    height: 10px;
+    font-size: 8px;
+    top: -4px;
+    left: 1px;
     position: absolute;
-    background: red;
     z-index: 100;
 }
 
 #video-wrapper #ne {
-    width:8px;
-    height: 8px;
-    top: -5px;
+    width:10px;
+    height: 10px;
+    font-size: 8px;
+    top: -4px;
     right: -5px;
     position: absolute;
-    background: red;
     z-index: 100;
 }
 
 #video-wrapper #sw {
-    width:8px;
-    height: 8px;
-    bottom: -5px;
-    left: -5px;
+    width:10px;
+    height: 10px;
+    font-size: 8px;
+    bottom: -1px;
+    left: 1px;
     position: absolute;
-    background: red;
     z-index: 100;
 }
 
 #video-wrapper #se {
-    width:8px;
-    height: 8px;
-    bottom: -5px;
+    width:10px;
+    height: 10px;
+    font-size: 8px;
+    bottom: -1px;
     right: -5px;
     position: absolute;
-    background: red;
     z-index: 100;
 }
 
@@ -144,7 +148,6 @@ body {
     resize: none;
     width: 100%;
     color: white;
-    font-size: 16px;
     padding: 10px;
     z-index: 10;
     border: none;

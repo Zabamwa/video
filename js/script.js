@@ -123,10 +123,10 @@ createElement = () => {
     const rotateDotNE = document.createElement('div');
     const rotateDotSE = document.createElement('div');
     setAttributes(div, {draggable: 'true', class: 'drag-element', id: `moment-${element}`, ondragstart: 'drag(event)'});
-    setAttributes(rotateDotNW, {class: 'rotate-dot', id: 'nw', onmousedown: 'selectRotateDot(event)'});
-    setAttributes(rotateDotSW, {class: 'rotate-dot', id: 'sw', onmousedown: 'selectRotateDot(event)'});
-    setAttributes(rotateDotNE, {class: 'rotate-dot', id: 'ne', onmousedown: 'selectRotateDot(event)'});
-    setAttributes(rotateDotSE, {class: 'rotate-dot', id: 'se', onmousedown: 'selectRotateDot(event)'});
+    setAttributes(rotateDotNW, {class: 'rotate-dot', onmousedown: 'selectRotateDot(event)'});
+    setAttributes(rotateDotSW, {class: 'rotate-dot', onmousedown: 'selectRotateDot(event)'});
+    setAttributes(rotateDotNE, {class: 'rotate-dot', onmousedown: 'selectRotateDot(event)'});
+    setAttributes(rotateDotSE, {class: 'rotate-dot', onmousedown: 'selectRotateDot(event)'});
     setAttributes(textarea, {
         class: 'info',
         placeholder: 'Text...',
@@ -137,6 +137,10 @@ createElement = () => {
 
     div.appendChild(textarea);
     div.appendChild(rotateDotNW);
+    rotateDotNW.innerHTML = '<i class="fas fa-undo" id="nw"></i>';
+    rotateDotNE.innerHTML = '<i class="fas fa-undo" id="ne"></i>';
+    rotateDotSW.innerHTML = '<i class="fas fa-undo" id="sw"></i>';
+    rotateDotSE.innerHTML = '<i class="fas fa-undo" id="se"></i>';
     div.appendChild(rotateDotSW);
     div.appendChild(rotateDotNE);
     div.appendChild(rotateDotSE);
