@@ -78,7 +78,7 @@ addTimeLine = (inputValue) => {
 
     const el = document.getElementById(selectMoment.id);
 
-    el.addEventListener("mousedown", () => {
+    el.addEventListener("mousemove", () => {
         timeUpdate()
     });
 };
