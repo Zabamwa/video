@@ -55,6 +55,7 @@ addTimeLine = (inputValue) => {
 
                 el.style.width = el.offsetWidth * 100 / wrapper.offsetWidth + '%';
                 el.style.height = el.offsetHeight * 100 / wrapper.offsetHeight + '%';
+                el.style.left = el.offsetLeft * 100 / wrapper.offsetWidth + '%';
             }
         });
     });
@@ -83,7 +84,7 @@ addTimeLine = (inputValue) => {
     });
 };
 
-rotateNWDot = (event, div, type) => {
+rotateSelectDot = (event, div, type) => {
     let degreeAdd;
     switch (type) {
         case 'nw':
@@ -135,12 +136,12 @@ createElement = () => {
         draggable: false
     });
 
-    div.appendChild(textarea);
-    div.appendChild(rotateDotNW);
     rotateDotNW.innerHTML = '<i class="fas fa-undo" id="nw"></i>';
     rotateDotNE.innerHTML = '<i class="fas fa-undo" id="ne"></i>';
     rotateDotSW.innerHTML = '<i class="fas fa-undo" id="sw"></i>';
     rotateDotSE.innerHTML = '<i class="fas fa-undo" id="se"></i>';
+    div.appendChild(textarea);
+    div.appendChild(rotateDotNW);
     div.appendChild(rotateDotSW);
     div.appendChild(rotateDotNE);
     div.appendChild(rotateDotSE);
@@ -156,7 +157,7 @@ createElement = () => {
         opacity: 0.001,
         helper: 'clone',
         drag: function (event) {
-            rotateNWDot(event, div, rotateDot)
+            rotateSelectDot(event, div, rotateDot)
         }
     });
 };
@@ -191,6 +192,8 @@ drop = ev => {
                 const wrapper = document.getElementById('video-wrapper');
                 el.style.width = el.offsetWidth * 100 / wrapper.offsetWidth + '%';
                 el.style.height = el.offsetHeight * 100 / wrapper.offsetHeight + '%';
+                el.style.left = el.offsetLeft * 100 / wrapper.offsetWidth + '%';
+                el.style.top = el.offsetTop * 100 / wrapper.offsetHeight + '%';
             }
         });
     });
@@ -289,7 +292,6 @@ momentShow = () => {
             }
         }
     });
-
 };
 
 
